@@ -24,9 +24,9 @@ class StoreCustomerRequest extends FormRequest
         return [
             'name' => ['required', 'string', 'max:255'],
             'email' => ['required', 'email', 'max:255', 'unique:customers,email'],
-            'phone' => ['nullable', 'string', 'max:50'],
+            'phone' => ['nullable', 'string', 'max:15', 'regex:/^\(\d{2}\) \d{5}-\d{4}$/'],
             'address' => ['nullable', 'string', 'max:500'],
-            'document' => ['nullable', 'string', 'max:100'],
+            'document' => ['nullable', 'string', 'max:18', 'unique:customers,document', 'regex:/^(\d{3}\.\d{3}\.\d{3}-\d{2}|\d{2}\.\d{3}\.\d{3}\/\d{4}-\d{2})$/'],
         ];
     }
 }

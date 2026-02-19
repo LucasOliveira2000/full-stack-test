@@ -53,6 +53,12 @@ class HandleInertiaRequests extends Middleware
             'view_admin' => fn () => Features::check($request, 'admin'),
             'is_impersonating' => fn () => app('impersonate')->isImpersonating(),
             'impersonator_name' => fn () => app('impersonate')->getImpersonator()?->name,
+            'flash' => [
+                'success' => fn () => $request->session()->get('success'),
+                'error' => fn () => $request->session()->get('error'),
+                'warning' => fn () => $request->session()->get('warning'),
+                'info' => fn () => $request->session()->get('info'),
+            ],
         ];
     }
 }

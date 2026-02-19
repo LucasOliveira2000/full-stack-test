@@ -7,6 +7,7 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Textarea } from '@/components/ui/textarea';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { useCustomerForm } from '@/composables/useCustomerForm';
 
 const breadcrumbs: BreadcrumbItem[] = [
     {
@@ -18,18 +19,10 @@ const breadcrumbs: BreadcrumbItem[] = [
         href: '/customers/create',
     },
 ];
+const { form, formatPhone, formatDocument, submit } = useCustomerForm();
 
-const form = useForm({
-    name: '',
-    email: '',
-    phone: '',
-    address: '',
-    document: '',
-});
+const handleSubmit = () => submit('/customers', 'post');
 
-const submit = () => {
-    form.post('/customers');
-};
 </script>
 
 <template>
@@ -39,7 +32,7 @@ const submit = () => {
         <div class="space-y-4 p-4">
             <h1 class="text-3xl font-bold">Create Customer</h1>
 
-            <form @submit.prevent="submit" class="space-y-6">
+            <form @submit.prevent="handleSubmit" class="space-y-6">
                 <Card>
                     <CardHeader>
                         <CardTitle>Customer Information</CardTitle>
@@ -78,7 +71,9 @@ const submit = () => {
                                 <Input
                                     id="phone"
                                     v-model="form.phone"
+                                    @update:model-value="value => form.phone = formatPhone(value)"
                                     placeholder="+1 (555) 123-4567"
+                                    maxlength="15"
                                 />
                                 <p v-if="form.errors.phone" class="text-sm text-destructive">
                                     {{ form.errors.phone }}
@@ -88,9 +83,12 @@ const submit = () => {
                             <div class="space-y-2">
                                 <Label for="document">CPF/CNPJ</Label>
                                 <Input
-                                    id="document"
-                                    v-model="form.document"
-                                    placeholder="123-45-6789"
+                                  id="document"
+                                  type="text"
+                                  :model-value="form.document"
+                                  @update:model-value="value => form.document = formatDocument(value)"
+                                  maxlength="18"
+                                  placeholder="000.000.000-00 ou 00.000.000/0000-00"
                                 />
                                 <p v-if="form.errors.document" class="text-sm text-destructive">
                                     {{ form.errors.document }}

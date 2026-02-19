@@ -7,6 +7,8 @@ import type { DefineComponent } from 'vue';
 import { createApp, h } from 'vue';
 import { ZiggyVue } from '../../vendor/tightenco/ziggy';
 import { initializeTheme } from './composables/useAppearance';
+import Vue3Toastify from 'vue3-toastify';
+import 'vue3-toastify/dist/index.css';
 
 const appName = import.meta.env.VITE_APP_NAME || 'Laravel';
 
@@ -33,7 +35,8 @@ createInertiaApp({
 					 */
 					app.mount(el);
 				},
-			});
+			})
+			.use(Vue3Toastify, { autoClose: 3000 });
 
 		return app;
 	},

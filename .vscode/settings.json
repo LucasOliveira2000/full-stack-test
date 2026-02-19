@@ -43,4 +43,5 @@
     },
     "favorites.sortOrder": "DESC",
     "biome.requireConfiguration": true,
+    "postman.settings.dotenv-detection-notification-visibility": false,
 }

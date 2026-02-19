@@ -4,7 +4,11 @@
         "paths": {
             "@/*": ["./resources/js/*"],
             "ziggy-js": ["./vendor/tightenco/ziggy"]
-        }
+        },
+        "types": [
+            "vue3-toastify/global"
+        ]
+
     },
     "files": [],
     "references": [

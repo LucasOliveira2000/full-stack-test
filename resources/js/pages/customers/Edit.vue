@@ -1,12 +1,13 @@
 <script setup lang="ts">
 import AppLayout from '@/layouts/AppLayout.vue';
-import { Head, router, useForm } from '@inertiajs/vue3';
+import { Head, router } from '@inertiajs/vue3';
 import { type BreadcrumbItem } from '@/types';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Textarea } from '@/components/ui/textarea';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { useCustomerForm } from '@/composables/useCustomerForm';
 
 interface Customer {
     id: number;
@@ -22,33 +23,19 @@ interface Props {
 }
 
 const props = defineProps<Props>();
+const { customer } = props; // para usar direto no template
 
 const breadcrumbs: BreadcrumbItem[] = [
-    {
-        title: 'Customers',
-        href: '/customers',
-    },
-    {
-        title: props.customer.name,
-        href: `/customers/${props.customer.id}`,
-    },
-    {
-        title: 'Edit',
-        href: `/customers/${props.customer.id}/edit`,
-    },
+    { title: 'Customers', href: '/customers' },
+    { title: customer.name, href: `/customers/${customer.id}` },
+    { title: 'Edit', href: `/customers/${customer.id}/edit` },
 ];
 
-const form = useForm({
-    name: props.customer.name,
-    email: props.customer.email,
-    phone: props.customer.phone || '',
-    address: props.customer.address || '',
-    document: props.customer.document || '',
-});
+const { form, formatPhone, formatDocument, submit } = useCustomerForm(customer);
 
-const submit = () => {
-    form.put(`/customers/${props.customer.id}`);
-};
+const handleSubmit = () => submit(`/customers/${customer.id}`, 'put');
+
+
 </script>
 
 <template>
@@ -58,13 +45,15 @@ const submit = () => {
         <div class="space-y-4 p-4">
             <h1 class="text-3xl font-bold">Edit {{ customer.name }}</h1>
 
-            <form @submit.prevent="submit" class="space-y-6">
+            <form @submit.prevent="handleSubmit" class="space-y-6">
                 <Card>
                     <CardHeader>
                         <CardTitle>Customer Information</CardTitle>
                     </CardHeader>
                     <CardContent class="space-y-4">
                         <div class="grid gap-4 md:grid-cols-2">
+
+                            <!-- Name -->
                             <div class="space-y-2">
                                 <Label for="name">Name *</Label>
                                 <Input
@@ -78,6 +67,7 @@ const submit = () => {
                                 </p>
                             </div>
 
+                            <!-- Email -->
                             <div class="space-y-2">
                                 <Label for="email">Email *</Label>
                                 <Input
@@ -92,30 +82,38 @@ const submit = () => {
                                 </p>
                             </div>
 
+                            <!-- Phone -->
                             <div class="space-y-2">
                                 <Label for="phone">Phone</Label>
                                 <Input
                                     id="phone"
                                     v-model="form.phone"
-                                    placeholder="+1 (555) 123-4567"
+                                    @update:model-value="value => form.phone = formatPhone(value)"
+                                    placeholder="(00) 09999-9999"
+                                    maxlength="15"
                                 />
                                 <p v-if="form.errors.phone" class="text-sm text-destructive">
                                     {{ form.errors.phone }}
                                 </p>
                             </div>
 
+                            <!-- Document -->
                             <div class="space-y-2">
                                 <Label for="document">Document / Tax ID</Label>
                                 <Input
                                     id="document"
                                     v-model="form.document"
-                                    placeholder="123-45-6789"
+                                    @update:model-value="value => form.document = formatDocument(value)"
+                                    @keypress="onlyNumbers"
+                                    maxlength="18"
+                                    placeholder="CPF 000.000.000-00 ou CNPJ 00.000.000/0000-00"
                                 />
                                 <p v-if="form.errors.document" class="text-sm text-destructive">
                                     {{ form.errors.document }}
                                 </p>
                             </div>
 
+                            <!-- Address -->
                             <div class="space-y-2 md:col-span-2">
                                 <Label for="address">Address</Label>
                                 <Textarea
@@ -128,10 +126,12 @@ const submit = () => {
                                     {{ form.errors.address }}
                                 </p>
                             </div>
+
                         </div>
                     </CardContent>
                 </Card>
 
+                <!-- Buttons -->
                 <div class="flex justify-end gap-2">
                     <Button
                         type="button"
