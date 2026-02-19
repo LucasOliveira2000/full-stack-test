@@ -25,6 +25,7 @@ class UpdateInvoiceRequest extends FormRequest
             'customer_id' => ['sometimes', 'required', 'exists:customers,id'],
             'status' => ['sometimes', 'required', 'string', 'in:draft,pending,paid,overdue,cancelled'],
             'due_date' => ['sometimes', 'required', 'date', 'after_or_equal:issue_date'],
+            'issue_date' => ['required', 'date', 'before_or_equal:today'],
             'metadata' => ['nullable', 'array'],
             'items' => ['sometimes', 'required', 'array', 'min:1'],
             'items.*.id' => ['nullable', 'exists:invoice_items,id'],
