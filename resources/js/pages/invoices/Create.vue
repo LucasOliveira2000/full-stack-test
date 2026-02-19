@@ -13,7 +13,6 @@ import {
     SelectValue,
 } from '@/components/ui/select';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { ref } from 'vue';
 
 interface Customer {
     id: number;
@@ -30,6 +29,7 @@ interface InvoiceItem {
 
 interface Props {
     customers: Customer[];
+    customer_id?: number;
 }
 
 const props = defineProps<Props>();
@@ -46,7 +46,7 @@ const breadcrumbs: BreadcrumbItem[] = [
 ];
 
 const form = useForm({
-    customer_id: '',
+    customer_id: props.customer_id ? props.customer_id.toString() : '',
     status: 'draft',
     issue_date: new Date().toISOString().split('T')[0],
     due_date: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000)
@@ -63,6 +63,7 @@ const form = useForm({
     ] as InvoiceItem[],
 });
 
+console.log('Selected Customer ID:', props.selectedCustomerId);
 const addItem = () => {
     form.items.push({
         title: '',
@@ -156,6 +157,14 @@ const submit = () => {
                                 <Input id="due_date" type="date" v-model="form.due_date" required />
                                 <p v-if="form.errors.due_date" class="text-sm text-destructive">
                                     {{ form.errors.due_date }}
+                                </p>
+                            </div>
+
+                            <div class="space-y-2">
+                                <Label for="issue_date">Issue Date</Label>
+                                <Input id="issue_date" type="date" v-model="form.issue_date" required />
+                                <p v-if="form.errors.issue_date" class="text-sm text-destructive">
+                                    {{ form.errors.issue_date }}
                                 </p>
                             </div>
                         </div>

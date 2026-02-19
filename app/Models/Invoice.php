@@ -24,6 +24,7 @@ class Invoice extends Model
         'due_date',
         'payment_date',
         'metadata',
+        'team_id',
     ];
 
     protected $casts = [
@@ -31,6 +32,7 @@ class Invoice extends Model
         'due_date' => 'date',
         'payment_date' => 'date',
         'metadata' => 'array',
+        'team_id' => 'integer',
     ];
 
     protected static function booted()

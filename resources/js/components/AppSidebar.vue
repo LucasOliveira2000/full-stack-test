@@ -25,13 +25,13 @@ const mainNavItems: NavItem[] = [
         current: route().current('dashboard'),
     },
     {
-      title: 'Clientes',
+      title: 'Customers',
       href: route('customers.index'),
       icon: UserCheck,
       current: route().current('customers.*'),
     },
     {
-      title: 'Faturas',
+      title: 'Invoices',
       href: route('invoices.index'),
       icon: Receipt,
       current: route().current('invoices.*'),

@@ -152,7 +152,7 @@ const deleteInvoice = (invoice: Invoice) => {
                 <CardHeader>
                     <div class="flex items-center justify-between">
                         <CardTitle>Recent Invoices</CardTitle>
-                        <Link href="/invoices/create">
+                        <Link :href="`/invoices/create/?customer_id=${customer.id}`">
                             <Button variant="outline" size="sm">Create Invoice</Button>
                         </Link>
                     </div>
@@ -204,7 +204,7 @@ const deleteInvoice = (invoice: Invoice) => {
             <Card v-else>
                 <CardContent class="py-8 text-center">
                     <p class="text-muted-foreground mb-4">No invoices yet</p>
-                    <Link href="/invoices/create">
+                    <Link :href="`/invoices/create/?customer_id=${customer.id}`">
                         <Button>Create First Invoice</Button>
                     </Link>
                 </CardContent>

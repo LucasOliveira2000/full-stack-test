@@ -25,6 +25,7 @@ class StoreInvoiceRequest extends FormRequest
             'customer_id' => ['required', 'exists:customers,id'],
             'status' => ['required', 'string', 'in:draft,pending,paid,overdue,cancelled'],
             'due_date' => ['required', 'date', 'after_or_equal:issue_date'],
+            'issue_date' => ['required', 'date', 'before_or_equal:today'],
             'metadata' => ['nullable', 'array'],
             'items' => ['required', 'array', 'min:1'],
             'items.*.title' => ['required', 'string', 'max:255'],

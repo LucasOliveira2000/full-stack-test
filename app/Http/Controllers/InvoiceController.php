@@ -8,6 +8,7 @@ use App\Models\Customer;
 use App\Actions\IssueInvoice;
 use App\Http\Requests\StoreInvoiceRequest;
 use App\Http\Requests\UpdateInvoiceRequest;
+use Illuminate\Http\Request;
 
 class InvoiceController extends Controller
 {
@@ -28,7 +29,7 @@ class InvoiceController extends Controller
     /**
      * Show the form for creating a new resource.
      */
-    public function create()
+    public function create(Request $request)
     {
         $customers = Customer::select('id', 'name', 'email')
             ->orderBy('name')
@@ -36,6 +37,7 @@ class InvoiceController extends Controller
 
         return Inertia::render('invoices/Create', [
             'customers' => $customers,
+            'customer_id' => $request->query('customer_id') ?? null,
         ]);
     }
 
